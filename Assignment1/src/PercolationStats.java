@@ -3,11 +3,15 @@ public class PercolationStats {
 	private double [] thresholds;
 	
 	// perform T independent experiments on an N-by-N grid
-	public PercolationStats(int N, int T) {
+	public PercolationStats(int N, int T) throws IllegalArgumentException {
+		
+		if (N <=0 || T <= 0) {
+			throw new IllegalArgumentException();
+		}
 		thresholds = new double [T];
 		
 		for(int e=1; e <= T; e++) {
-			//StdOut.println("Experiment " + e);
+			StdOut.println("Experiment " + e);
 			Percolation p = new Percolation(N);
 			int count=0;
 			while(true) {
