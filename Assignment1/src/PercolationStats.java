@@ -1,16 +1,13 @@
 public class PercolationStats {
 
-	private int N, T;
 	private double thresholds [];
 	
 	// perform T independent experiments on an N-by-N grid
 	public PercolationStats(int N, int T) {
-		this.N = N;
-		this.T = T;
 		thresholds = new double [T];
 		
 		for(int e=1; e<=T; e++){
-			StdOut.println("Experiment " + e);
+			//StdOut.println("Experiment " + e);
 			Percolation p = new Percolation(N);
 			int count=0;
 			while(true){
@@ -20,7 +17,7 @@ public class PercolationStats {
 					p.open(i, j);
 					count++;
 					if(p.percolates()){
-						StdOut.println((double)count/((double)N*N));
+						//StdOut.println((double)count/((double)N*N));
 						thresholds[e-1] = (double)count/((double)N*N);
 						break;
 					}
@@ -28,10 +25,10 @@ public class PercolationStats {
 			}
 		}
 		
-		StdOut.println("mean\t = " + mean());
-		StdOut.println("stddev\t = " + stddev());
-		StdOut.println("95% confidence interval\t = " 
-		+ confidenceLo() + " , " + confidenceHi());
+//		StdOut.println("mean\t = " + mean());
+//		StdOut.println("stddev\t = " + stddev());
+//		StdOut.println("95% confidence interval\t = " 
+//		+ confidenceLo() + " , " + confidenceHi());
 	}
 
 	// sample mean of percolation threshold
@@ -60,6 +57,6 @@ public class PercolationStats {
 
 	// test client (described below)
 	public static void main(String[] args) {
-		new PercolationStats(200, 100);
+		new PercolationStats(2, 100000);
 	}
 }
