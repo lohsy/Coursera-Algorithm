@@ -10,11 +10,11 @@ public class PercolationStats {
 		}
 		thresholds = new double [T];
 		
-		for(int e=1; e <= T; e++) {
-			StdOut.println("Experiment " + e);
+		for (int e = 1; e <= T; e++) {
+			//StdOut.println("Experiment " + e);
 			Percolation p = new Percolation(N);
 			int count=0;
-			while(true) {
+			while (true) {
 				int i = StdRandom.uniform(N) + 1;
 				int j = StdRandom.uniform(N) + 1;
 				if (!p.isOpen(i, j)) {
@@ -22,7 +22,7 @@ public class PercolationStats {
 					count++;
 					if (p.percolates()) {
 						//StdOut.println((double)count/((double)N*N));
-						thresholds[e-1] = (double) count/( (double) N*N);
+						thresholds[e-1] = (double) count/((double) N*N);
 						break;
 					}
 				}
