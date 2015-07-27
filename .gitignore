@@ -1,3 +1,5 @@
+#take a look at http://www.bmchild.com/2012/06/git-ignore-for-java-eclipse-project.html
+
 *.class
 
 # Mobile Tools for Java (J2ME)

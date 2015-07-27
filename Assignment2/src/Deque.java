@@ -6,7 +6,7 @@ public class Deque<Item> implements Iterable<Item> {
 	private Node first, last;
 	private int size;
 	
-	class Node {
+	private class Node {
 		Item item;
 		Node next;
 		Node prev;

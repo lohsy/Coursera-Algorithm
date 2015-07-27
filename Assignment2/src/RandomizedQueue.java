@@ -6,7 +6,7 @@ public class RandomizedQueue<Item> implements Iterable<Item>{
 	private Node first, last;
 	private int N;
 	
-	class Node {
+	private class Node {
 		Item item;
 		Node next;
 		Node prev;
