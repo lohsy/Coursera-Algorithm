@@ -85,6 +85,8 @@ public class Deque<Item> implements Iterable<Item> {
 		if (isEmpty()) {
 			first = null;
 			last = null;
+		} else {
+			first.prev = null;
 		}
 
 		return item;
@@ -103,7 +105,9 @@ public class Deque<Item> implements Iterable<Item> {
 		if (isEmpty()) {
 			first = null;
 			last = null;
-		}	
+		} else {
+			last.next = null;
+		}
 		
 		return item;
 	}

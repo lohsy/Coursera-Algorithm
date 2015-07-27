@@ -94,6 +94,7 @@ public class RandomizedQueueTest {
 		}
 		
 		for (int i : hits) {
+//			System.out.println(i);
 			Assert.assertTrue(i < 130 && i > 70);
 		}
 	}

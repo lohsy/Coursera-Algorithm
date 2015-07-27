@@ -57,9 +57,17 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 			throw new NoSuchElementException();
 
 		int index = StdRandom.uniform(0, N);
-		Node tmp = first;
-		for (int i = 0; i < index; i++) {
-			tmp = tmp.next;
+		Node tmp;
+		if(index <= N/2) {
+			tmp = first;
+			for (int i = 0; i < index; i++) {
+				tmp = tmp.next;
+			}
+		} else {
+			tmp = last;
+			for (int i = 0; i < N - index - 1; i++) {
+				tmp = tmp.prev;
+			}
 		}
 
 		Item item = tmp.item;
@@ -90,9 +98,18 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 			throw new NoSuchElementException();
 		
 		int index = StdRandom.uniform(0, N);
-		Node tmp = first;
-		for (int i = 0; i < index; i++) {
-			tmp = tmp.next;
+		
+		Node tmp;
+		if(index <= N/2) {
+			tmp = first;
+			for (int i = 0; i < index; i++) {
+				tmp = tmp.next;
+			}
+		} else {
+			tmp = last;
+			for (int i = 0; i < N - index - 1; i++) {
+				tmp = tmp.prev;
+			}
 		}
 
 		Item item = tmp.item;
@@ -129,9 +146,17 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 			if (currentIndex >= indexes.length)
 				throw new NoSuchElementException();
 
-			Node current = first;
-			for (int i = 0; i < indexes[currentIndex]; i++)
-				current = current.next;
+			Node current;
+			if(currentIndex <= indexes.length) {
+				current = first;
+				for (int i = 0; i < indexes[currentIndex]; i++)
+					current = current.next;
+			} else {
+				current = last;
+				for (int i = 0; i < N - indexes[currentIndex] - 1; i++)
+					current = current.next;
+			}
+			
 			Item item = current.item;
 			current = current.next;
 			currentIndex++;

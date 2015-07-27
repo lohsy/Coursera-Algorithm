@@ -190,4 +190,20 @@ public class DequeTest {
 			System.out.println();
 		}
 	}
+	
+	@Test
+	public void testIteratorAfterAddRemove() {
+		Deque<Integer> deque = new Deque<Integer>();
+		deque.addLast(1);
+        deque.removeFirst();
+        deque.addFirst(3);
+        deque.addLast(4);
+        deque.addLast(5);
+        deque.removeFirst();
+        deque.removeLast();
+        
+        Assert.assertTrue(!deque.isEmpty());
+        Assert.assertTrue(deque.size() == 1);
+        for (int i : deque) System.out.println(i);
+	}
 }
