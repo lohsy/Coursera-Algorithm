@@ -16,28 +16,28 @@ public class RandomizedQueueTest {
 	@Test
 	public void testRQEnqueue() {
 		RandomizedQueue<Integer> d = new RandomizedQueue<Integer>();
-		d.enqueue(1);	d.enqueue(2);	d.enqueue(4);	d.enqueue(4);
-		Assert.assertTrue(d.size() == 4);
+		for(int i=0;i<1000;i++) d.enqueue(i);
+		Assert.assertTrue(d.size() == 1000);
 		Assert.assertTrue(!d.isEmpty());
 	}
 	
 	@Test
 	public void testRQdequeue() {
 		RandomizedQueue<Integer> d = new RandomizedQueue<Integer>();
-		d.enqueue(1);	d.enqueue(2);	d.enqueue(3);	d.enqueue(4);
+		for(int i=0;i<1000;i++) d.enqueue(i);
 		
 		d.dequeue();
 		
-		Assert.assertTrue(d.size() == 3);
+		Assert.assertTrue(d.size() == 999);
 		Assert.assertTrue(!d.isEmpty());
 	}
 	
 	@Test
 	public void testRQdequeueTillEmpty() {
 		RandomizedQueue<Integer> d = new RandomizedQueue<Integer>();
-		d.enqueue(1);	d.enqueue(2);	d.enqueue(3);	d.enqueue(4);
+		for(int i=0;i<10;i++) d.enqueue(i);
 		
-		d.dequeue();	d.dequeue();	d.dequeue();	d.dequeue();
+		for(int i=0;i<10;i++) d.dequeue();
 		
 		Assert.assertTrue(d.size() == 0);
 		Assert.assertTrue(d.isEmpty());
@@ -94,7 +94,7 @@ public class RandomizedQueueTest {
 		}
 		
 		for (int i : hits) {
-//			System.out.println(i);
+			System.out.println(i);
 			Assert.assertTrue(i < 130 && i > 70);
 		}
 	}

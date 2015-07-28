@@ -3,52 +3,50 @@ import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
-	private Node first, last;
-	private int N;
-
-	private class Node {
-		Item item;
-		Node next;
-		Node prev;
-	}
+	private Item [] q;
+	private int itemSize, nullSize;
+	private int first;
 
 	// construct an empty randomized queue
 	public RandomizedQueue() {
-		first = null;
-		last = null;
-		N = 0;
+		q = (Item []) new Object [2];
+		itemSize = nullSize = 0;
+		first = 0;
 	}
 
 	// is the queue empty?
 	public boolean isEmpty() {
-		return N == 0;
+		return itemSize == 0;
 	}
 
 	// return the number of items on the queue
 	public int size() {
-		return N;
+		return itemSize;
 	}
 
+	private void resize(int capacity){
+		Item [] tmp = (Item []) new Object [capacity];
+		int count = 0;
+		for(int i=0;i<q.length;i++){
+			if(q[(first+i)%q.length] != null) {
+				tmp[count] = q[(first+i)%q.length];
+				count++;
+			}
+		}
+		q = tmp;
+		first = 0;
+		nullSize = 0;
+	}
+	
 	// add the item
 	public void enqueue(Item item) {
 		if (item == null)
 			throw new NullPointerException();
-
-		if (first == null) {
-			first = new Node();
-			first.item = item;
-			first.next = null;
-			first.prev = null;
-			last = first;
-		} else {
-			Node oldLast = last;
-			last = new Node();
-			last.item = item;
-			last.next = null;
-			last.prev = oldLast;
-			oldLast.next = last;
-		}
-		N++;
+		
+		if (itemSize + nullSize == q.length) 
+			resize(2*itemSize + nullSize);
+		q[itemSize + nullSize] = item;
+		itemSize++;
 	}
 
 	// remove and return a random item
@@ -56,39 +54,24 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 		if (isEmpty())
 			throw new NoSuchElementException();
 
-		int index = StdRandom.uniform(0, N);
-		Node tmp;
-		if(index <= N/2) {
-			tmp = first;
-			for (int i = 0; i < index; i++) {
-				tmp = tmp.next;
-			}
-		} else {
-			tmp = last;
-			for (int i = 0; i < N - index - 1; i++) {
-				tmp = tmp.prev;
-			}
-		}
-
-		Item item = tmp.item;
-
-		if (tmp.next == null && tmp.prev == null) { // 1 element in list
-			first = last = null;
-		} else if (tmp.next == null) { // last element in list
-			last = last.prev;
-			last.next = null;
-		} else if (tmp.prev == null) { // first element in list
-			first = first.next;
-			first.prev = null;
-		} else { // some where in middle of list
-			Node prev = tmp.prev;
-			Node next = tmp.next;
-			prev.next = next;
-			next.prev = prev;
-		}
-		tmp = null;
-		N--;
-
+		int index;
+		do {
+			index = StdRandom.uniform(0, itemSize + nullSize);
+		} while (q[index] == null);
+		
+		if(index == first)
+			first++; 
+		if(first == q.length)
+			first = 0;
+		
+		Item item = q[index];
+		q[index] = null;
+		
+		itemSize--;	nullSize++;
+		
+		if( (double) itemSize / (double) (itemSize + nullSize) <= 0.25)
+			resize(itemSize*2);
+		
 		return item;
 	}
 
@@ -97,24 +80,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 		if (isEmpty())
 			throw new NoSuchElementException();
 		
-		int index = StdRandom.uniform(0, N);
-		
-		Node tmp;
-		if(index <= N/2) {
-			tmp = first;
-			for (int i = 0; i < index; i++) {
-				tmp = tmp.next;
-			}
-		} else {
-			tmp = last;
-			for (int i = 0; i < N - index - 1; i++) {
-				tmp = tmp.prev;
-			}
-		}
+		int index;
+		do {
+			index = StdRandom.uniform(0, itemSize + nullSize);
+		} while (q[index] == null);
 
-		Item item = tmp.item;
-
-		return item;
+		return q[index];
 	}
 
 	// return an independent iterator over items in random order
@@ -130,9 +101,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
 		public RandomizedQueueIterator() {
 			currentIndex = 0;
-			indexes = new int[N];
-			for (int i = 0; i < indexes.length; i++)
-				indexes[i] = i;
+			indexes = new int[itemSize];
+			int count = 0;
+			for (int i = 0; i < q.length; i++) {
+				if(q[i] != null) {
+					indexes[count] = i;
+					count++;
+				}
+			}
 			StdRandom.shuffle(indexes);
 		}
 
@@ -146,19 +122,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 			if (currentIndex >= indexes.length)
 				throw new NoSuchElementException();
 
-			Node current;
-			if(currentIndex <= indexes.length) {
-				current = first;
-				for (int i = 0; i < indexes[currentIndex]; i++)
-					current = current.next;
-			} else {
-				current = last;
-				for (int i = 0; i < N - indexes[currentIndex] - 1; i++)
-					current = current.next;
-			}
-			
-			Item item = current.item;
-			current = current.next;
+			Item item = q[indexes[currentIndex]];
 			currentIndex++;
 			return item;
 		}
