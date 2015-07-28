@@ -3,13 +3,13 @@ import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
 
-	private Item [] q;
+	private Item[] q;
 	private int itemSize, nullSize;
 	private int first;
 
 	// construct an empty randomized queue
 	public RandomizedQueue() {
-		q = (Item []) new Object [2];
+		q = (Item[]) new Object[2];
 		itemSize = nullSize = 0;
 		first = 0;
 	}
@@ -24,12 +24,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 		return itemSize;
 	}
 
-	private void resize(int capacity){
-		Item [] tmp = (Item []) new Object [capacity];
+	private void resize(int capacity) {
+		Item[] tmp = (Item[]) new Object[capacity];
 		int count = 0;
-		for(int i=0;i<q.length;i++){
-			if(q[(first+i)%q.length] != null) {
-				tmp[count] = q[(first+i)%q.length];
+		for (int i = 0; i < q.length; i++) {
+			if (q[(first + i) % q.length] != null) {
+				tmp[count] = q[(first + i) % q.length];
 				count++;
 			}
 		}
@@ -37,14 +37,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 		first = 0;
 		nullSize = 0;
 	}
-	
+
 	// add the item
 	public void enqueue(Item item) {
 		if (item == null)
 			throw new NullPointerException();
-		
-		if (itemSize + nullSize == q.length) 
-			resize(2*itemSize + nullSize);
+
+		if (itemSize + nullSize == q.length)
+			resize(2 * itemSize + nullSize);
 		q[itemSize + nullSize] = item;
 		itemSize++;
 	}
@@ -58,20 +58,22 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 		do {
 			index = StdRandom.uniform(0, itemSize + nullSize);
 		} while (q[index] == null);
-		
-		if(index == first)
-			first++; 
-		if(first == q.length)
+
+		if (index == first)
+			first++;
+		if (first == q.length)
 			first = 0;
-		
+
 		Item item = q[index];
 		q[index] = null;
-		
-		itemSize--;	nullSize++;
-		
-		if( (double) itemSize / (double) (itemSize + nullSize) <= 0.25)
-			resize(itemSize*2);
-		
+
+		itemSize--;
+		nullSize++;
+
+		if (itemSize >= 2
+				&& (double) itemSize / (double) (itemSize + nullSize) <= 0.25)
+			resize(itemSize * 2);
+
 		return item;
 	}
 
@@ -79,7 +81,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 	public Item sample() {
 		if (isEmpty())
 			throw new NoSuchElementException();
-		
+
 		int index;
 		do {
 			index = StdRandom.uniform(0, itemSize + nullSize);
@@ -104,7 +106,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 			indexes = new int[itemSize];
 			int count = 0;
 			for (int i = 0; i < q.length; i++) {
-				if(q[i] != null) {
+				if (q[i] != null) {
 					indexes[count] = i;
 					count++;
 				}

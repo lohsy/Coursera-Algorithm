@@ -164,4 +164,16 @@ public class RandomizedQueueTest {
 			System.out.println();
 		}
 	}
+	
+	@Test
+	public void testRQFailed1() {
+		RandomizedQueue<Integer> rq = new RandomizedQueue<Integer>();	
+		rq.enqueue(654);
+        rq.size();//        ==> 1
+        rq.dequeue();//     ==> 654
+        rq.isEmpty() ;//    ==> true
+        rq.size();//        ==> 0
+        rq.size();//        ==> 0
+        rq.enqueue(863);//
+	}
 }
