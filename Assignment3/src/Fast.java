@@ -8,7 +8,7 @@ public class Fast {
 
 		In in = new In(filename);
 		int N = in.readInt();
-		System.out.println(N);
+		//System.out.println(N);
 		StdDraw.setXscale(0, 32768);
 		StdDraw.setYscale(0, 32768);
 		Point[] pts = new Point[N];
