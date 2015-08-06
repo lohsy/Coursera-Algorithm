@@ -63,8 +63,6 @@ public class Solver {
 		while (true) {
 			Node candidate = pq.delMin();
 			Node candidateTwin = pqTwin.delMin();
-			Node candidateParent = candidate.prev;
-			Node candidateTwinParent = candidateTwin.prev;
 
 			if (candidate.board.isGoal()) {
 				isSolvable = true;
@@ -79,13 +77,13 @@ public class Solver {
 			}
 
 			for (Board n : candidate.board.neighbors()) {
-				if (candidateParent == null || !candidateParent.equals(n))
+				if (candidate.prev == null || !candidate.prev.board.equals(n))
 					pq.insert(new Node(n, candidate.moves + 1, candidate));
 			}
 
 			for (Board n : candidateTwin.board.neighbors()) {
-				if (candidateTwinParent == null
-						|| !candidateTwinParent.equals(n))
+				if (candidateTwin.prev == null
+						|| !candidateTwin.prev.board.equals(n))
 					pqTwin.insert(new Node(n, candidateTwin.moves + 1,
 							candidateTwin));
 			}
