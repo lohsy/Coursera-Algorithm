@@ -19,15 +19,15 @@ public class Solver {
 		public int man() {
 			return board.manhattan();
 		}
-		
+
 		public int ham() {
 			return board.hamming();
 		}
-		
+
 		public int moves() {
 			return moves;
 		}
-		
+
 		@Override
 		public int compareTo(Node that) {
 			int result;
@@ -36,11 +36,11 @@ public class Solver {
 			else if (this.man() + this.moves() > that.man() + that.moves())
 				result = 1;
 			else {
-				if(this.ham() + this.moves() < that.ham() + that.moves())
+				if (this.ham() + this.moves() < that.ham() + that.moves())
 					result = -1;
-				else if(this.ham() + this.moves() > that.ham() + that.moves())
+				else if (this.ham() + this.moves() > that.ham() + that.moves())
 					result = 1;
-				else 
+				else
 					result = 0;
 			}
 			return result;
@@ -59,7 +59,7 @@ public class Solver {
 		totalMoves = 0;
 
 		// Start solver
-		//int whileLoopCounter = 0;
+		// int whileLoopCounter = 0;
 		while (true) {
 			Node candidate = pq.delMin();
 			Node candidateTwin = pqTwin.delMin();
@@ -88,7 +88,7 @@ public class Solver {
 							candidateTwin));
 			}
 
-			//StdOut.println("Loop: " + whileLoopCounter++);
+			// StdOut.println("Loop: " + whileLoopCounter++);
 		}
 	}
 
@@ -99,7 +99,7 @@ public class Solver {
 
 	// min number of moves to solve initial board; -1 if unsolvable
 	public int moves() {
-		if(isSolvable())
+		if (isSolvable())
 			return totalMoves;
 		else
 			return -1;
@@ -107,7 +107,7 @@ public class Solver {
 
 	// sequence of boards in a shortest solution; null if unsolvable
 	public Iterable<Board> solution() {
-		if(isSolvable()){
+		if (isSolvable()) {
 			Stack<Board> solution = new Stack<Board>();
 			Node tmp = last;
 			while (tmp != null) {
@@ -124,7 +124,7 @@ public class Solver {
 	public static void main(String[] args) {
 		// create initial board from file
 		// In in = new In(args[0]);
-		In in = new In("8puzzle/puzzle3x3-15.txt");
+		In in = new In("8puzzle/puzzle42.txt");
 		int N = in.readInt();
 		int[][] blocks = new int[N][N];
 		for (int i = 0; i < N; i++)
