@@ -41,10 +41,10 @@ public class KdTree {
 
 		if (isEmpty()) {
 			root = new Node(p, null);
-			size++;
 		} else {
 			root = insert(root, p, true);
 		}
+		size++;
 	}
 
 	/**
@@ -64,7 +64,6 @@ public class KdTree {
 				if (c.lb == null) {
 					c.lb = new Node(p, new RectHV(c.rect.xmin(), c.rect.ymin(),
 							c.p.x(), c.rect.ymax()));
-					size++;
 				} else { // else continue recursing
 					c.lb = insert(c.lb, p, !x);
 				}
@@ -73,7 +72,6 @@ public class KdTree {
 				if (c.rt == null) {
 					c.rt = new Node(p, new RectHV(c.p.x(), c.rect.ymin(),
 							c.rect.xmax(), c.rect.ymax()));
-					size++;
 				} else { // else continue recursing
 					c.rt = insert(c.rt, p, !x);
 				}
@@ -84,7 +82,6 @@ public class KdTree {
 				if (c.lb == null) {
 					c.lb = new Node(p, new RectHV(c.rect.xmin(), c.rect.ymin(),
 							c.rect.xmax(), c.p.y()));
-					size++;
 				} else { // else continue recursing
 					c.lb = insert(c.lb, p, !x);
 				}
@@ -93,7 +90,6 @@ public class KdTree {
 				if (c.rt == null) {
 					c.rt = new Node(p, new RectHV(c.rect.xmin(), c.p.y(),
 							c.rect.xmax(), c.rect.ymax()));
-					size++;
 				} else { // else continue recursing
 					c.rt = insert(c.rt, p, !x);
 				}
