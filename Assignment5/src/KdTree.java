@@ -41,6 +41,7 @@ public class KdTree {
 
 		if (isEmpty()) {
 			root = new Node(p, null);
+			size++;
 		} else {
 			root = insert(root, p, true);
 		}
