@@ -57,6 +57,9 @@ public class KdTree {
 	 * @return root
 	 */
 	private Node insert(Node c, Point2D p, boolean x) {
+		if(c.p.equals(p))
+			return c;
+		
 		// go left if smaller
 		if (x) {
 			if (p.x() < c.p.x()) {
