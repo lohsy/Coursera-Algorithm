@@ -1,3 +1,8 @@
+import edu.princeton.cs.algs4.Digraph;
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.Queue;
+import edu.princeton.cs.algs4.SeparateChainingHashST;
+
 public class WordNet {
 
 	private Digraph digraph;
