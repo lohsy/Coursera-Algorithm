@@ -13,8 +13,6 @@ public class SAP {
 	public SAP(Digraph G) {
 		if (G == null)
 			throw new NullPointerException();
-		if (new DirectedCycle(G).hasCycle())
-			throw new IllegalArgumentException();
 		this.digraph = G;
 	}
 

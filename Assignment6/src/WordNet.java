@@ -1,4 +1,5 @@
 import edu.princeton.cs.algs4.Digraph;
+import edu.princeton.cs.algs4.DirectedCycle;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.SeparateChainingHashST;
@@ -19,6 +20,10 @@ public class WordNet {
 		allNouns = new SeparateChainingHashST<String, Queue<Integer>>();
 		readSynsets(synsets);
 		readHypernyms(hypernyms);
+		
+		if (new DirectedCycle(digraph).hasCycle())
+			throw new IllegalArgumentException();
+		
 		sap = new SAP(digraph);
 	}
 
