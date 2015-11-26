@@ -20,11 +20,22 @@ public class WordNet {
 		allNouns = new SeparateChainingHashST<String, Queue<Integer>>();
 		readSynsets(synsets);
 		readHypernyms(hypernyms);
-		
+
+		sap = new SAP(digraph);
+
 		if (new DirectedCycle(digraph).hasCycle())
 			throw new IllegalArgumentException();
-		
-		sap = new SAP(digraph);
+
+		// Check if not rooted
+		int rooted = 0;
+		for (int i = 0; i < digraph.V(); i++) {
+			if (!digraph.adj(i).iterator().hasNext())
+				rooted++;
+		}
+
+		if (rooted != 1) {
+			throw new IllegalArgumentException("Not a rooted DAG");
+		}
 	}
 
 	private void readSynsets(String filename) {
@@ -96,6 +107,8 @@ public class WordNet {
 
 	// do unit testing of this class
 	public static void main(String[] args) {
-		new WordNet("wordnet/synsets.txt", "wordnet/hypernyms.txt");
+		// new WordNet("wordnet/synsets.txt", "wordnet/hypernyms.txt");
+		new WordNet("wordnet/synsets3.txt",
+				"wordnet/hypernyms3InvalidTwoRoots.txt");
 	}
 }

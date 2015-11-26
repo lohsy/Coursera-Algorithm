@@ -1,6 +1,5 @@
 import edu.princeton.cs.algs4.BreadthFirstDirectedPaths;
 import edu.princeton.cs.algs4.Digraph;
-import edu.princeton.cs.algs4.DirectedCycle;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
@@ -13,7 +12,7 @@ public class SAP {
 	public SAP(Digraph G) {
 		if (G == null)
 			throw new NullPointerException();
-		this.digraph = G;
+		this.digraph = new Digraph(G);
 	}
 
 	// length of shortest ancestral path between v and w; -1 if no such path
