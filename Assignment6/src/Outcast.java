@@ -6,7 +6,7 @@ public class Outcast {
 
 	private WordNet w;
 	private int[][] dist;
-
+	
 	public Outcast(WordNet wordnet) {
 		w = wordnet;
 	}
