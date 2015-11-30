@@ -9,7 +9,7 @@ public class SeamCarver {
 	private double[][] e;
 	private double[] distTo;
 	private int[] edgeTo;
-	private int[][] intensity;
+	private Color[][] intensity;
 
 	private boolean isTransposed;
 	private int width, height;
@@ -23,10 +23,10 @@ public class SeamCarver {
 		width = picture.width();
 		height = picture.height();
 
-		intensity = new int[width()][height()];
+		intensity = new Color[width()][height()];
 		for (int j = 0; j < height(); j++)
 			for (int i = 0; i < width(); i++)
-				intensity[i][j] = pic.get(i, j).getRGB();
+				intensity[i][j] = pic.get(i, j);
 
 		e = new double[width()][height()];
 		for (int j = 0; j < height(); j++)
@@ -42,7 +42,7 @@ public class SeamCarver {
 
 		for (int i = 0; i < result.width(); i++)
 			for (int j = 0; j < result.height(); j++)
-				result.set(i, j, new Color(intensity[i][j]));
+				result.set(i, j, intensity[i][j]);
 
 		return result;
 	}
@@ -65,10 +65,10 @@ public class SeamCarver {
 		if (x == 0 || x == width() - 1 || y == 0 || y == height() - 1)
 			return 1000.0;
 		else {
-			Color top = new Color(intensity[x][y - 1]);
-			Color bot = new Color(intensity[x][y + 1]);
-			Color left = new Color(intensity[x - 1][y]);
-			Color right = new Color(intensity[x + 1][y]);
+			Color top = intensity[x][y - 1];
+			Color bot = intensity[x][y + 1];
+			Color left = intensity[x - 1][y];
+			Color right = intensity[x + 1][y];
 
 			int diffx = getPixelDiff(left, right);
 			int diffy = getPixelDiff(top, bot);
