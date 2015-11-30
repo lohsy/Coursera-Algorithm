@@ -9,7 +9,7 @@ public class SeamCarver {
 	private double[][] e;
 	private double[] distTo;
 	private int[] edgeTo;
-	private Color[][] intensity;
+	private int[][] intensity;
 
 	private boolean isTransposed;
 	private int width, height;
@@ -23,10 +23,10 @@ public class SeamCarver {
 		width = picture.width();
 		height = picture.height();
 
-		intensity = new Color[width()][height()];
+		intensity = new int[width()][height()];
 		for (int j = 0; j < height(); j++)
 			for (int i = 0; i < width(); i++)
-				intensity[i][j] = pic.get(i, j);
+				intensity[i][j] = pic.get(i, j).getRGB();
 
 		e = new double[width()][height()];
 		for (int j = 0; j < height(); j++)
@@ -42,7 +42,7 @@ public class SeamCarver {
 
 		for (int i = 0; i < result.width(); i++)
 			for (int j = 0; j < result.height(); j++)
-				result.set(i, j, intensity[i][j]);
+				result.set(i, j, new Color(intensity[i][j]));
 
 		return result;
 	}
@@ -65,10 +65,10 @@ public class SeamCarver {
 		if (x == 0 || x == width() - 1 || y == 0 || y == height() - 1)
 			return 1000.0;
 		else {
-			Color top = intensity[x][y - 1];
-			Color bot = intensity[x][y + 1];
-			Color left = intensity[x - 1][y];
-			Color right = intensity[x + 1][y];
+			Color top = new Color(intensity[x][y - 1]);
+			Color bot = new Color(intensity[x][y + 1]);
+			Color left = new Color(intensity[x - 1][y]);
+			Color right = new Color(intensity[x + 1][y]);
 
 			int diffx = getPixelDiff(left, right);
 			int diffy = getPixelDiff(top, bot);
@@ -126,18 +126,21 @@ public class SeamCarver {
 		if (seam.length != width())
 			throw new IllegalArgumentException();
 		for (int i = 0; i < seam.length - 1; i++)
-			if (Math.abs(seam[i] - seam[i+1]) > 1)
+			if (Math.abs(seam[i] - seam[i + 1]) > 1)
 				throw new IllegalArgumentException();
-		
+		for (int i = 0; i < seam.length; i++)
+			if (seam[i] < 0 || seam[i] >= height())
+				throw new IllegalArgumentException();
+
 		height--;
 		for (int i = 0; i < seam.length; i++)
 			for (int j = seam[i]; j < intensity[0].length - 1; j++)
 				intensity[i][j] = intensity[i][j + 1];
 
 		// create a transposed energy map
-		double[][] newE = new double[height()][width()];
-		for (int j = 0; j < width(); j++)
-			for (int i = 0; i < height(); i++) {
+		double[][] newE = new double[e.length - 1][e[0].length];
+		for (int j = 0; j < newE[0].length; j++)
+			for (int i = 0; i < newE.length; i++) {
 				if (i < seam[j] - 1)
 					newE[i][j] = e[i][j];
 				else if (seam[j] - i == 1 || seam[j] - i == 0)
@@ -155,9 +158,12 @@ public class SeamCarver {
 		if (seam.length != height())
 			throw new IllegalArgumentException();
 		for (int i = 0; i < seam.length - 1; i++)
-			if (Math.abs(seam[i] - seam[i+1]) > 1)
+			if (Math.abs(seam[i] - seam[i + 1]) > 1)
 				throw new IllegalArgumentException();
-		
+		for (int i = 0; i < seam.length; i++)
+			if (seam[i] < 0 || seam[i] >= width())
+				throw new IllegalArgumentException();
+
 		width--;
 		for (int j = 0; j < seam.length; j++)
 			for (int i = seam[j]; i < intensity.length - 1; i++)
