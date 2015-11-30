@@ -7,11 +7,9 @@ public class SeamCarver {
 
 	private final Picture pic;
 	private double[][] e;
-	private double[] distTo;
-	private int[] edgeTo;
-	private Color[][] intensity;
+	private int[][] intensity;
 
-	// private boolean isTransposed;
+	private boolean isTransposed;
 	private int width, height;
 
 	// create a seam carver object based on the given picture
@@ -23,17 +21,17 @@ public class SeamCarver {
 		width = picture.width();
 		height = picture.height();
 
-		intensity = new Color[width()][height()];
+		intensity = new int[width()][height()];
 		for (int j = 0; j < height(); j++)
 			for (int i = 0; i < width(); i++)
-				intensity[i][j] = pic.get(i, j);
+				intensity[i][j] = pic.get(i, j).getRGB();
 
 		e = new double[width()][height()];
 		for (int j = 0; j < height(); j++)
 			for (int i = 0; i < width(); i++)
 				e[i][j] = energy(i, j);
 
-		// isTransposed = false;
+		isTransposed = false;
 	}
 
 	// current picture
@@ -42,7 +40,7 @@ public class SeamCarver {
 
 		for (int i = 0; i < result.width(); i++)
 			for (int j = 0; j < result.height(); j++)
-				result.set(i, j, intensity[i][j]);
+				result.set(i, j, new Color(intensity[i][j]));
 
 		return result;
 	}
@@ -65,10 +63,10 @@ public class SeamCarver {
 		if (x == 0 || x == width() - 1 || y == 0 || y == height() - 1)
 			return 1000.0;
 		else {
-			Color top = intensity[x][y - 1];
-			Color bot = intensity[x][y + 1];
-			Color left = intensity[x - 1][y];
-			Color right = intensity[x + 1][y];
+			Color top = new Color(intensity[x][y - 1]);
+			Color bot = new Color(intensity[x][y + 1]);
+			Color left = new Color(intensity[x - 1][y]);
+			Color right = new Color(intensity[x + 1][y]);
 
 			int diffx = getPixelDiff(left, right);
 			int diffy = getPixelDiff(top, bot);
@@ -89,13 +87,11 @@ public class SeamCarver {
 
 	// sequence of indices for horizontal seam
 	public int[] findHorizontalSeam() {
-		// if (!isTransposed) {
-		// transpose();
-		// isTransposed = true;
-		// }
-		transpose();
-		findSeam();
-		return buildSeam();
+		if (!isTransposed) {
+			transpose();
+			isTransposed = true;
+		}
+		return findSeam();
 	}
 
 	// transpose energy map
@@ -112,12 +108,11 @@ public class SeamCarver {
 
 	// sequence of indices for vertical seam
 	public int[] findVerticalSeam() {
-		// if (isTransposed) {
-		// transpose();
-		// isTransposed = false;
-		// }
-		findSeam();
-		return buildSeam();
+		if (isTransposed) {
+			transpose();
+			isTransposed = false;
+		}
+		return findSeam();
 	}
 
 	// remove horizontal seam from current picture
@@ -138,35 +133,24 @@ public class SeamCarver {
 			for (int j = seam[i]; j < intensity[0].length - 1; j++)
 				intensity[i][j] = intensity[i][j + 1];
 
-		transpose();
+		if (!isTransposed) {
+			transpose();
+			isTransposed = true;
+		}
 
-		double[][] newE = new double[width()][height()];
-		for (int i = 0; i < width(); i++)
-			for (int j = 0; j < height(); j++) {
-				if (j < seam[i] - 1)
+		// create a transposed energy map
+		double[][] newE = new double[e.length - 1][e[0].length];
+
+		for (int j = 0; j < newE[0].length; j++)
+			for (int i = 0; i < newE.length; i++) {
+				if (i < seam[j] - 1)
 					newE[i][j] = e[i][j];
-				else if (seam[i] - j == 1 || seam[i] - j == 0)
-					newE[i][j] = energy(i, j);
+				else if (seam[j] - i == 1 || seam[j] - i == 0)
+					newE[i][j] = energy(j, i);
 				else
-					newE[i][j] = e[i][j + 1];
+					newE[i][j] = e[i + 1][j];
 			}
 		e = newE;
-
-		// // create a transposed energy map
-		// double[][] newE = new double[e.length - 1][e[0].length];
-		//
-		// System.out.println(seam.length + "\t" + newE.length + "\t" +
-		// newE[0].length);
-		// for (int j = 0; j < newE[0].length; j++)
-		// for (int i = 0; i < newE.length; i++) {
-		// if (i < seam[j] - 1)
-		// newE[i][j] = e[i][j];
-		// else if (seam[j] - i == 1 || seam[j] - i == 0)
-		// newE[i][j] = energy(j, i);
-		// else
-		// newE[i][j] = e[i + 1][j];
-		// }
-		// e = newE;
 	}
 
 	// remove vertical seam from current picture
@@ -187,6 +171,11 @@ public class SeamCarver {
 			for (int i = seam[j]; i < intensity.length - 1; i++)
 				intensity[i][j] = intensity[i + 1][j];
 
+		if (isTransposed) {
+			transpose();
+			isTransposed = false;
+		}
+
 		double[][] newE = new double[width()][height()];
 		for (int j = 0; j < height(); j++)
 			for (int i = 0; i < width(); i++) {
@@ -200,11 +189,11 @@ public class SeamCarver {
 		e = newE;
 	}
 
-	private void findSeam() {
+	private int[] findSeam() {
 		// create 2 extra vertex
 		// 1 at top and 1 at bottom that connects to energy
-		edgeTo = new int[width() * height() + 2];
-		distTo = new double[width() * height() + 2];
+		int[] edgeTo = new int[width() * height() + 2];
+		double[] distTo = new double[width() * height() + 2];
 		for (int i = 1; i < distTo.length; i++)
 			distTo[i] = Double.POSITIVE_INFINITY;
 
@@ -220,7 +209,7 @@ public class SeamCarver {
 		// (left to right, top to bottom) except bot row
 		for (int j = 0; j < e[0].length - 1; j++)
 			for (int i = 0; i < e.length; i++)
-				relax(i, j);
+				relax(i, j, edgeTo, distTo);
 
 		// relax bot vertex (linked to all vertex in bot row)
 		for (int i = 0; i < e.length; i++) {
@@ -230,10 +219,8 @@ public class SeamCarver {
 				edgeTo[distTo.length - 1] = coordsToIndex(i, e[0].length - 1);
 			}
 		}
-	}
 
-	private int[] buildSeam() {
-
+		// build the seam
 		int x = edgeTo[edgeTo.length - 1];
 		Stack<Integer> stack = new Stack<Integer>();
 		stack.push(indexToX(x));
@@ -252,7 +239,7 @@ public class SeamCarver {
 		return seam;
 	}
 
-	private void relax(int i, int j) {
+	private void relax(int i, int j, int[] edgeTo, double[] distTo) {
 		// check diag left, bot and diag right weights
 		for (int k = i - 1; k <= i + 1; k++) {
 			if (k < 0 || k >= e.length)
