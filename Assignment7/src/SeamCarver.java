@@ -11,7 +11,7 @@ public class SeamCarver {
 	private int[] edgeTo;
 	private Color[][] intensity;
 
-	private boolean isTransposed;
+	// private boolean isTransposed;
 	private int width, height;
 
 	// create a seam carver object based on the given picture
@@ -33,7 +33,7 @@ public class SeamCarver {
 			for (int i = 0; i < width(); i++)
 				e[i][j] = energy(i, j);
 
-		isTransposed = false;
+		// isTransposed = false;
 	}
 
 	// current picture
@@ -89,10 +89,11 @@ public class SeamCarver {
 
 	// sequence of indices for horizontal seam
 	public int[] findHorizontalSeam() {
-		if (!isTransposed) {
-			transpose();
-			isTransposed = true;
-		}
+		// if (!isTransposed) {
+		// transpose();
+		// isTransposed = true;
+		// }
+		transpose();
 		findSeam();
 		return buildSeam();
 	}
@@ -111,10 +112,10 @@ public class SeamCarver {
 
 	// sequence of indices for vertical seam
 	public int[] findVerticalSeam() {
-		if (isTransposed) {
-			transpose();
-			isTransposed = false;
-		}
+		// if (isTransposed) {
+		// transpose();
+		// isTransposed = false;
+		// }
 		findSeam();
 		return buildSeam();
 	}
@@ -137,18 +138,35 @@ public class SeamCarver {
 			for (int j = seam[i]; j < intensity[0].length - 1; j++)
 				intensity[i][j] = intensity[i][j + 1];
 
-		// create a transposed energy map
-		double[][] newE = new double[e.length - 1][e[0].length];
-		for (int j = 0; j < newE[0].length; j++)
-			for (int i = 0; i < newE.length; i++) {
-				if (i < seam[j] - 1)
+		transpose();
+
+		double[][] newE = new double[width()][height()];
+		for (int i = 0; i < width(); i++)
+			for (int j = 0; j < height(); j++) {
+				if (j < seam[i] - 1)
 					newE[i][j] = e[i][j];
-				else if (seam[j] - i == 1 || seam[j] - i == 0)
-					newE[i][j] = energy(j, i);
+				else if (seam[i] - j == 1 || seam[i] - j == 0)
+					newE[i][j] = energy(i, j);
 				else
-					newE[i][j] = e[i + 1][j];
+					newE[i][j] = e[i][j + 1];
 			}
 		e = newE;
+
+		// // create a transposed energy map
+		// double[][] newE = new double[e.length - 1][e[0].length];
+		//
+		// System.out.println(seam.length + "\t" + newE.length + "\t" +
+		// newE[0].length);
+		// for (int j = 0; j < newE[0].length; j++)
+		// for (int i = 0; i < newE.length; i++) {
+		// if (i < seam[j] - 1)
+		// newE[i][j] = e[i][j];
+		// else if (seam[j] - i == 1 || seam[j] - i == 0)
+		// newE[i][j] = energy(j, i);
+		// else
+		// newE[i][j] = e[i + 1][j];
+		// }
+		// e = newE;
 	}
 
 	// remove vertical seam from current picture
