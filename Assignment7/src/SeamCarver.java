@@ -127,10 +127,13 @@ public class SeamCarver {
 			throw new IllegalArgumentException();
 
 		height--;
-		for (int i = 0; i < seam.length; i++)
-			for (int j = seam[i]; j < intensity[0].length - 1; j++)
+		for (int i = 0; i < seam.length; i++) {
+			if(seam[i] < 0 || seam[i] >= height())
+				throw new IllegalArgumentException();
+			for (int j = seam[i]; j < intensity[0].length - 1; j++)	
 				intensity[i][j] = intensity[i][j + 1];
-
+		}
+			
 		// create a transposed energy map
 		double[][] newE = new double[height()][width()];
 		for (int j = 0; j < width(); j++)
@@ -153,9 +156,14 @@ public class SeamCarver {
 			throw new IllegalArgumentException();
 
 		width--;
-		for (int j = 0; j < seam.length; j++)
-			for (int i = seam[j]; i < intensity.length - 1; i++)
+		for (int j = 0; j < seam.length; j++) {
+			if(seam[j] < 0 || seam[j] >= width())
+				throw new IllegalArgumentException();
+			for (int i = seam[j]; i < intensity.length - 1; i++)	
 				intensity[i][j] = intensity[i + 1][j];
+		}
+			
+			
 
 		double[][] newE = new double[width()][height()];
 		for (int j = 0; j < height(); j++)
