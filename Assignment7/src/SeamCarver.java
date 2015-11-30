@@ -59,8 +59,8 @@ public class SeamCarver {
 
 	// energy of pixel at column x and row y
 	public double energy(int x, int y) {
-		if (x < 0 || x > width() || y < 0 || y > height())
-			throw new IndexOutOfBoundsException("X: " + x + " Y: " + y);
+		if (x < 0 || x >= width() || y < 0 || y >= height())
+			throw new IndexOutOfBoundsException();
 
 		if (x == 0 || x == width() - 1 || y == 0 || y == height() - 1)
 			return 1000.0;
@@ -125,15 +125,15 @@ public class SeamCarver {
 			throw new NullPointerException();
 		if (seam.length != width())
 			throw new IllegalArgumentException();
-
-		height--;
-		for (int i = 0; i < seam.length; i++) {
-			if(seam[i] < 0 || seam[i] >= height())
+		for (int i = 0; i < seam.length - 1; i++)
+			if (Math.abs(seam[i] - seam[i+1]) > 1)
 				throw new IllegalArgumentException();
-			for (int j = seam[i]; j < intensity[0].length - 1; j++)	
+		
+		height--;
+		for (int i = 0; i < seam.length; i++)
+			for (int j = seam[i]; j < intensity[0].length - 1; j++)
 				intensity[i][j] = intensity[i][j + 1];
-		}
-			
+
 		// create a transposed energy map
 		double[][] newE = new double[height()][width()];
 		for (int j = 0; j < width(); j++)
@@ -154,16 +154,14 @@ public class SeamCarver {
 			throw new NullPointerException();
 		if (seam.length != height())
 			throw new IllegalArgumentException();
-
-		width--;
-		for (int j = 0; j < seam.length; j++) {
-			if(seam[j] < 0 || seam[j] >= width())
+		for (int i = 0; i < seam.length - 1; i++)
+			if (Math.abs(seam[i] - seam[i+1]) > 1)
 				throw new IllegalArgumentException();
-			for (int i = seam[j]; i < intensity.length - 1; i++)	
+		
+		width--;
+		for (int j = 0; j < seam.length; j++)
+			for (int i = seam[j]; i < intensity.length - 1; i++)
 				intensity[i][j] = intensity[i + 1][j];
-		}
-			
-			
 
 		double[][] newE = new double[width()][height()];
 		for (int j = 0; j < height(); j++)
