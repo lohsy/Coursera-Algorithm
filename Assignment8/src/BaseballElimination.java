@@ -106,15 +106,12 @@ public class BaseballElimination {
 		private int teamIndex, numGameVertices, numTeamVertices, numVertices;;
 		private int gameOffset, teamOffset;
 		private double capacity;
-		private String teamName;
 		private ArrayList<String> setR;
 		private FlowNetwork fn;
 		private FordFulkerson ff;
 		private boolean isEliminated;
 
 		EliminationProblem(String team) {
-			// System.out.println("Team: " + team);
-			teamName = team;
 			teamIndex = teamNames.get(team);
 			numTeamVertices = teamNames.size() - 1;
 
@@ -149,7 +146,7 @@ public class BaseballElimination {
 		}
 
 		private void addEdge(int from, int to, double capacity) {
-			// /System.out.println(from + " --> " + to + " (" + capacity + ")");
+			System.out.println(from + " --> " + to + " (" + capacity + ")");
 			fn.addEdge(new FlowEdge(from, to, capacity));
 		}
 
@@ -203,17 +200,15 @@ public class BaseballElimination {
 				isEliminated = false;
 			else {
 				isEliminated = true;
-				for (int i = 0; i < teamNames.size() - 1; i++) {
+				for (int i = 0; i < teamNames.size(); i++) {
 					if (i == teamIndex)
 						continue;
 					if (i < teamIndex) {
 						if (ff.inCut(teamOffset + i))
-							;
-						setR.add(getTeamFromIndex(i));
+							setR.add(getTeamFromIndex(i));
 					} else {
 						if (ff.inCut(teamOffset + i - 1))
-							;
-						setR.add(getTeamFromIndex(i));
+							setR.add(getTeamFromIndex(i));
 					}
 				}
 			}
@@ -240,20 +235,24 @@ public class BaseballElimination {
 				"baseball/teams48.txt", "baseball/teams50.txt",
 				"baseball/teams54.txt", "baseball/teams60.txt" };
 
-		for (String file : filenames) {
-			// String file = filenames[7];
-			BaseballElimination division = new BaseballElimination(file);
-			for (String team : division.teams()) {
-				if (division.isEliminated(team)) {
-					StdOut.print(team + " is eliminated by the subset R = { ");
-					for (String t : division.certificateOfElimination(team)) {
-						StdOut.print(t + " ");
-					}
-					StdOut.println("}");
-				} else {
-					StdOut.println(team + " is not eliminated");
-				}
-			}
+		// for (String file : filenames) {
+		String file = filenames[2];
+		BaseballElimination division = new BaseballElimination(file);
+		StdOut.print("Ghaddafi" + " is eliminated by the subset R = { ");
+		for (String t : division.certificateOfElimination("Ghaddafi")) {
+			StdOut.print(t + " ");
 		}
+		// for (String team : division.teams()) {
+		// if (division.isEliminated(team)) {
+		// StdOut.print(team + " is eliminated by the subset R = { ");
+		// for (String t : division.certificateOfElimination(team)) {
+		// StdOut.print(t + " ");
+		// }
+		// StdOut.println("}");
+		// } else {
+		// StdOut.println(team + " is not eliminated");
+		// }
+		// }
+		// }
 	}
 }
