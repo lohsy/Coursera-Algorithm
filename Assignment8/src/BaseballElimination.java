@@ -101,17 +101,16 @@ public class BaseballElimination {
 		return ep.setR();
 	}
 
-	class EliminationProblem {
+	private class EliminationProblem {
 
-		int teamIndex, numGameVertices, numTeamVertices, numVertices;;
-		int gameOffset, teamOffset;
-		double capacity;
-		String teamName;
-		ArrayList<String> setR;
-		FlowNetwork fn;
-		FordFulkerson ff;
-
-		boolean isEliminated;
+		private int teamIndex, numGameVertices, numTeamVertices, numVertices;;
+		private int gameOffset, teamOffset;
+		private double capacity;
+		private String teamName;
+		private ArrayList<String> setR;
+		private FlowNetwork fn;
+		private FordFulkerson ff;
+		private boolean isEliminated;
 
 		EliminationProblem(String team) {
 			// System.out.println("Team: " + team);
