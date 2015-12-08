@@ -77,16 +77,12 @@ public class BoggleSolver {
 			// iterate over non marked neighbours
 			for (int i : neighbours(v, board)) {
 				if (!marked[i]) {
-					// System.out.println(board.getLetter(getRow(i, board),
-					// getCol(i, board)));
-					boolean[] newMarked = new boolean[marked.length];
-					for (int j = 0; j < marked.length; j++)
-						newMarked[j] = marked[j];
 					if (isQ(i, board))
-						dfs(board, newMarked, i, prefix + "QU");
+						dfs(board, marked, i, prefix + "QU");
 					else
-						dfs(board,newMarked, i, prefix + 
+						dfs(board,marked, i, prefix + 
 								board.getLetter(getRow(i, board), getCol(i, board)));
+					marked[i] = false;
 				}
 			}
 		}
