@@ -9,7 +9,6 @@ import edu.princeton.cs.algs4.StdOut;
 public class BoggleSolver {
 
 	private TrieSETAZ trie;
-	//private TST<Integer> trie;
 	private HashSet<String> words;
 
 	// Initializes the data structure using the given array of strings as the
@@ -17,11 +16,9 @@ public class BoggleSolver {
 	// (You can assume each word in the dictionary contains only the uppercase
 	// letters A through Z.)
 	public BoggleSolver(String[] dictionary) {
-		//trie = new TST<Integer>();
 		trie = new TrieSETAZ();
 
 		for (String s : dictionary) {
-			//trie.put(s, s.length());
 			trie.add(s);
 		}
 	}
@@ -33,16 +30,8 @@ public class BoggleSolver {
 
 		int length = board.rows() * board.cols();
 		for (int i = 0; i < length; i++) {
-			// System.out.println("Iteration " + i);
 			char c = board.getLetter(getRow(i, board), getCol(i, board));
-			
-//			if (c == 'Q')
-//				dfs(board, new boolean[length], i, "QU");
-//			else
-//				dfs(board, new boolean[length], i, ""+c);
-		
 			dfs2(board, new boolean[length], i, ""+c, trie.getRoot().next[c - 'A']);
-			
 		}
 
 		return words;
@@ -62,18 +51,16 @@ public class BoggleSolver {
 		return board.cols() * row + col;
 	}
 
-	private boolean isQ(int v, BoggleBoard board) {
-		return board.getLetter(getRow(v, board), getCol(v, board)) == 'Q';
-	}
-
 	private void dfs2(BoggleBoard board, boolean[] marked, int v, String prefix, Node n) {
 		marked[v] = true;
 
 		if (n == null)
 			return;
 		
-		if(prefix.charAt(prefix.length() - 1) == 'Q')
+		if(prefix.charAt(prefix.length() - 1) == 'Q') {
 			dfs2(board,marked, v, prefix + 'U', n.next['U' - 'A']);
+			return;
+		}
 		
 		if(n.isString && prefix.length() >= 3 && !words.contains(prefix)){
 			words.add(prefix);
@@ -86,38 +73,6 @@ public class BoggleSolver {
 				marked[i] = false;
 			}
 		}
-	}
-
-	
-	private void dfs(BoggleBoard board, boolean[] marked, int v, String prefix) {
-		marked[v] = true;
-
-		// System.out.print(prefix +"\t[" + getRow(v, board) + "][" + getCol(v,
-		// board) + "]");
-
-		// if prefix exists continue, else just terminate
-		if (trie.keysWithPrefix(prefix).iterator().hasNext()) {
-			// System.out.print("\t prefix exists");
-			// if word exists, add to set
-			if (prefix.length() >= 3 && trie.contains(prefix)
-					&& !words.contains(prefix)) {
-				words.add(prefix);
-				// System.out.print("\t word exists");
-			}
-			// System.out.println();
-			// iterate over non marked neighbours
-			for (int i : neighbours(v, board)) {
-				if (!marked[i]) {
-					if (isQ(i, board))
-						dfs(board, marked, i, prefix + "QU");
-					else
-						dfs(board,marked, i, prefix + 
-								board.getLetter(getRow(i, board), getCol(i, board)));
-					marked[i] = false;
-				}
-			}
-		}
-		// System.out.println();
 	}
 
 	private Iterable<Integer> neighbours(int v, BoggleBoard board) {
@@ -173,11 +128,11 @@ public class BoggleSolver {
 		String [] b = {"boggle/board4x4.txt", "boggle/board-q.txt", "boggle/board-16q.txt"};
 		String [] d = {"boggle/dictionary-algs4.txt", "boggle/dictionary-16q.txt"};
 		
-		BoggleBoard board = new BoggleBoard(b[1]);
+		BoggleBoard board = new BoggleBoard(b[2]);
 		
 		long time = System.currentTimeMillis();
 		
-		In in = new In(d[0]);
+		In in = new In(d[1]);
 		String[] dictionary = in.readAllStrings();
 		BoggleSolver solver = new BoggleSolver(dictionary);
 		System.out.println("Constructor: " + (System.currentTimeMillis() - time)/1000.0 + " seconds.");
