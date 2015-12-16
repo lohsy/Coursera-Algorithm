@@ -1,28 +1,56 @@
-import edu.princeton.cs.algs4.SuffixArrayX;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class CircularSuffixArray {
 
-	private SuffixArrayX sa;
+	private Integer [] indexes;
 	
 	// circular suffix array of s
 	public CircularSuffixArray(String s) {
-		if (s == null)
+		if(s == null)
 			throw new NullPointerException();
-		
-		sa = new SuffixArrayX(s);
-	
+		generateSuffixArray(s);
 	}
 	
 	// length of s
 	public int length() {
-		return sa.length();
+		return indexes.length;
 	}
 
 	// returns index of ith sorted suffix
 	public int index(int i) {
 		if (i < 0 || i >= length())
 			throw new IndexOutOfBoundsException();
-		return sa.index(i);
+		return indexes[i];
+	}
+
+	private void generateSuffixArray(final String s) {
+		
+		indexes = new Integer[s.length()];
+		for (int i = 0; i < indexes.length; i++)
+			indexes[i] = i;
+
+		Arrays.sort(indexes, new Comparator<Integer>() {
+
+			@Override
+			public int compare(Integer i1, Integer i2) {
+
+				for (int i = 0; i < s.length(); i++) {
+					if (s.charAt((i1 + i) % length()) < s.charAt((i2 + i)
+							% length()))
+						return -1;
+					if (s.charAt((i1 + i) % length()) > s.charAt((i2 + i)
+							% length()))
+						return 1;
+				}
+
+				return 0;
+			}
+		});
+		
+		//for(int i : indexes) {
+		//	System.out.println(s.charAt(i) + " " + i);
+		//}
 	}
 
 	// unit testing of the methods (optional)

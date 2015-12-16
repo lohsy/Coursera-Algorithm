@@ -62,15 +62,11 @@ public class BurrowsWheeler {
 		}
 
 		// build message
-		StringBuilder sb = new StringBuilder();
-
 		int index = first;
 		for(int i=0;i<t.length();i++) {
-			sb.append(sorted[index]);
+			BinaryStdOut.write(sorted[index], 8);
 			index = next[index];
 		}
-
-		BinaryStdOut.write(sb.toString(), 8);
 		BinaryStdOut.close();
     	
 //    	System.out.println("first: " + first);
