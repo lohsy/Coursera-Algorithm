@@ -32,23 +32,10 @@ public class BurrowsWheeler {
     	
 		int first = BinaryStdIn.readInt();
 		String t = BinaryStdIn.readString();
-		Character[] sorted = new Character[t.length()];
-		for (int i = 0; i < t.length(); i++)
-			sorted[i] = t.charAt(i);
+		char[] sorted = t.toCharArray();
 
 		// sort the chars
-		Arrays.sort(sorted, new Comparator<Character>() {
-
-			@Override
-			public int compare(Character c1, Character c2) {
-				if (c1 < c2)
-					return -1;
-				else if (c1 > c2)
-					return 1;
-				else
-					return 0;
-			}
-		});
+		Arrays.sort(sorted);
 
 		// obtain next array
 		int[] next = new int[t.length()];
