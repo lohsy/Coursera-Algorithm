@@ -39,8 +39,6 @@ public class BurrowsWheeler {
 
 		// obtain next array
 		int[] next = new int[t.length()];
-		for (int i = 0; i < next.length; i++)
-			next[i] = -1;
 
 		int count = 0;
 		for (int i = 0; i < sorted.length; i++) {
@@ -67,11 +65,10 @@ public class BurrowsWheeler {
 		StringBuilder sb = new StringBuilder();
 
 		int index = first;
-		while (next[index] != first) {
+		for(int i=0;i<t.length();i++) {
 			sb.append(sorted[index]);
 			index = next[index];
 		}
-		sb.append(sorted[index]);
 
 		BinaryStdOut.write(sb.toString(), 8);
 		BinaryStdOut.close();
