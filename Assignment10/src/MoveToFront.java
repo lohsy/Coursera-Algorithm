@@ -42,10 +42,12 @@ public class MoveToFront {
 		}
 
 		while (!BinaryStdIn.isEmpty()) {
-			char c = BinaryStdIn.readChar();
-			char out = chars[c];
-			moveFront(chars, c);
-			BinaryStdOut.write(out, 8);
+//			char c = BinaryStdIn.readChar();
+//			char out = chars[c];
+//			moveFront(chars, c);
+//			BinaryStdOut.write(out, 8);
+			moveFront(chars, BinaryStdIn.readChar());
+			BinaryStdOut.write(chars[0], 8);
 		}
 		BinaryStdOut.close();
 	}

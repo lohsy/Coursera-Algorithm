@@ -1,11 +1,9 @@
-import java.util.Arrays;
-import java.util.Comparator;
 
 
 public class CircularSuffixArray {
 
     private static final int R             = 256;   // extended ASCII alphabet size
-    private static final int CUTOFF        =  2;   // cutoff to insertion sort
+    private static final int CUTOFF        =  15;   // cutoff to insertion sort
 	
     private int [] indexes;
 	
