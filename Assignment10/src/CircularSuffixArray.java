@@ -1,10 +1,12 @@
+import java.util.Arrays;
+import java.util.Comparator;
+
 
 public class CircularSuffixArray {
 
     private static final int R             = 256;   // extended ASCII alphabet size
-    private static final int CUTOFF        =  15;   // cutoff to insertion sort
+    private static final int CUTOFF        =  2;   // cutoff to insertion sort
 	
-	//private Integer [] indexes;
     private int [] indexes;
 	
 	// circular suffix array of s
@@ -12,21 +14,22 @@ public class CircularSuffixArray {
 		if (s == null)
 			throw new NullPointerException();
 
+		//MSD
 		indexes = new int[s.length()];
 		for (int i = 0; i < indexes.length; i++)
 			indexes[i] = i;
 		int[] aux = new int[s.length()];
 
-		sort(s, indexes, 0, s.length() - 1, aux);
+		sort(s, indexes, 0, s.length() - 1, 0, aux);
 		
-		//System.out.println("MSD");
-		//for(int i : indexes) {
-		//	System.out.println(s.charAt(i) + " " + i);
-		//}
-		//System.out.println("Done\n\n");
-		//
-		//System.out.println("OLD");
-		//generateSuffixArray(s);
+		//old method
+		//Integer [] indexes2 = generateSuffixArray(s);
+		
+		//compare
+//		for(int i=0;i<indexes.length;i++) {
+//			System.out.print(indexes[i] + " " + s.charAt(indexes[i]) + " ");
+//			System.out.print(indexes2[i] + " " + s.charAt(indexes2[i]) + "\n");
+//		}
 	}
 	
 	// length of s
@@ -41,9 +44,9 @@ public class CircularSuffixArray {
 		return indexes[i];
 	}
 
-//	private void generateSuffixArray(final String s) {
+//	private Integer [] generateSuffixArray(final String s) {
 //		
-//		indexes = new Integer[s.length()];
+//		Integer [] indexes = new Integer[s.length()];
 //		for (int i = 0; i < indexes.length; i++)
 //			indexes[i] = i;
 //
@@ -65,13 +68,11 @@ public class CircularSuffixArray {
 //			}
 //		});
 //		
-//		for(int i : indexes) {
-//			System.out.println(s.charAt(i) + " " + i);
-//		}
+//		return indexes;
 //	}
 	
 	// sort from indexes[lo] to indexes[hi], which are indexes to chars of s
-	private static void sort(String s, int[] indexes, int lo, int hi, int[] aux) {
+	private static void sort(String s, int[] indexes, int lo, int hi, int d, int[] aux) {
 
 		// cutoff to insertion sort for small subarrays
 		if (hi <= lo + CUTOFF) {
@@ -82,7 +83,7 @@ public class CircularSuffixArray {
 		// compute frequency counts
 		int[] count = new int[R + 2];
 		for (int i = lo; i <= hi; i++) {
-			int c = s.charAt(indexes[i]);
+			int c = s.charAt((indexes[i] + d) % s.length());
 			count[c + 2]++;
 		}
 
@@ -92,7 +93,7 @@ public class CircularSuffixArray {
 
 		// distribute
 		for (int i = lo; i <= hi; i++) {
-			int c = s.charAt(indexes[i]);
+			int c = s.charAt((indexes[i] + d) % s.length());
 			aux[count[c + 1]++] = indexes[i];
 		}
 
@@ -102,7 +103,7 @@ public class CircularSuffixArray {
 
 		// recursively sort for each character (excludes sentinel -1)
 		for (int r = 0; r < R; r++)
-			sort(s, indexes, lo + count[r], lo + count[r + 1] - 1, aux);
+			sort(s, indexes, lo + count[r], lo + count[r + 1] - 1, d+1, aux);
 	}
     
     // insertion sort a[lo..hi]
@@ -134,6 +135,9 @@ public class CircularSuffixArray {
     
 	// unit testing of the methods (optional)
 	public static void main(String[] args) {
-		new CircularSuffixArray("abcdefghijklmnopqrstuvwxyz0123456789");
+//		In in = new In("burrows/amendments.txt");
+//		String s = in.readAll();
+//		System.out.println(s);
+//		new CircularSuffixArray(s);
 	}
 }
