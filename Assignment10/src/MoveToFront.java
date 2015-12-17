@@ -25,13 +25,12 @@ public class MoveToFront {
 		BinaryStdOut.close();
 	}
 
-	private static int moveFront(char[] chars, int index) {
+	private static void moveFront(char[] chars, int index) {
 		char tmp = chars[index];
 		for (int i = index - 1; i >= 0; i--) {
 			chars[i + 1] = chars[i];
 		}
 		chars[0] = tmp;
-		return index;
 	}
 
 	// apply move-to-front decoding, reading from standard input and writing to

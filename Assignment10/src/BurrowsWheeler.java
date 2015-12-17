@@ -3,6 +3,7 @@ import java.util.Arrays;
 import edu.princeton.cs.algs4.BinaryStdIn;
 import edu.princeton.cs.algs4.BinaryStdOut;
 
+//use MSD
 public class BurrowsWheeler {
     // apply Burrows-Wheeler encoding, reading from standard input and writing to standard output
     public static void encode() {
