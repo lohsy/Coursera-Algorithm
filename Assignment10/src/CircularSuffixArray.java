@@ -72,6 +72,11 @@ public class CircularSuffixArray {
 	// sort from indexes[lo] to indexes[hi], which are indexes to chars of s
 	private static void sort(String s, int[] indexes, int lo, int hi, int d, int[] aux) {
 
+		//fix for string with all same chars
+		//stop recursing with offset d greater than s (a cycle has been completed)
+		if(d >= s.length())
+			return;
+		
 		// cutoff to insertion sort for small subarrays
 		if (hi <= lo + CUTOFF) {
 			insertion(s, indexes, lo, hi);
@@ -136,6 +141,6 @@ public class CircularSuffixArray {
 //		In in = new In("burrows/amendments.txt");
 //		String s = in.readAll();
 //		System.out.println(s);
-//		new CircularSuffixArray(s);
+		new CircularSuffixArray("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 	}
 }
